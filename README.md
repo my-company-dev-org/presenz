@@ -1,7 +1,7 @@
 # PresenZ — Web Landing Page
 
 Official marketing website for **PresenZ** — an app that surfaces live art, music, food, nightlife, cinema, and city culture on a real-time map. Every moment is visible only while it's happening, and disappears automatically after 48 hours.
-
+AJ
 ---
 
 ## 🌐 Live Pages
