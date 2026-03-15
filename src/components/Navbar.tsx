@@ -1,18 +1,16 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { usePathname } from 'next/navigation'
 import Image from 'next/image'
 import { imgLogo, APPSTORE_URL } from '@/lib/images'
-
-const NAV_LINKS = [
-  { label: 'Home',  href: '/' },
-  { label: 'About', href: '/about' },
-]
+import { useLanguage, LANGUAGES, LangCode } from '@/lib/LanguageContext'
 
 // ─── Search overlay ───────────────────────────────────────────────────────────
 function SearchOverlay({ onClose }: { onClose: () => void }) {
   const [query, setQuery] = useState('')
+  const { t } = useLanguage()
+
   return (
     <div
       className="fixed inset-0 z-[100] flex flex-col items-center justify-start pt-28 px-4"
@@ -30,7 +28,7 @@ function SearchOverlay({ onClose }: { onClose: () => void }) {
           <input
             autoFocus
             type="text"
-            placeholder="Search events, artists, places…"
+            placeholder={t.nav.searchPlaceholder}
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             className="flex-1 text-base outline-none text-gray-800 placeholder-gray-400"
@@ -39,8 +37,10 @@ function SearchOverlay({ onClose }: { onClose: () => void }) {
         </div>
         {query.length === 0 && (
           <div className="px-5 py-4">
-            <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">Popular</p>
-            {['Live Music', 'Art Exhibitions', 'Fashion Shows', 'Cultural Events'].map((s) => (
+            <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">
+              {t.nav.popularLabel}
+            </p>
+            {t.nav.popularSearches.map((s) => (
               <button
                 key={s}
                 className="w-full text-left px-3 py-2.5 rounded-lg text-sm text-gray-700 hover:bg-gray-50 transition"
@@ -53,9 +53,96 @@ function SearchOverlay({ onClose }: { onClose: () => void }) {
         )}
         {query.length > 0 && (
           <div className="px-5 py-4 text-sm text-gray-500">
-            Searching for <span className="font-semibold text-gray-800">"{query}"</span>…
+            {t.nav.searchingFor}{' '}
+            <span className="font-semibold text-gray-800">&ldquo;{query}&rdquo;</span>…
           </div>
         )}
+      </div>
+    </div>
+  )
+}
+
+// ─── Language picker dropdown (desktop) ──────────────────────────────────────
+function LanguagePicker() {
+  const { lang, setLang } = useLanguage()
+  const [open, setOpen] = useState(false)
+  const ref = useRef<HTMLDivElement>(null)
+
+  const current = LANGUAGES.find((l) => l.code === lang) ?? LANGUAGES[0]
+
+  useEffect(() => {
+    const handler = (e: MouseEvent) => {
+      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false)
+    }
+    document.addEventListener('mousedown', handler)
+    return () => document.removeEventListener('mousedown', handler)
+  }, [])
+
+  return (
+    <div ref={ref} className="relative">
+      <button
+        onClick={() => setOpen((v) => !v)}
+        className="flex items-center gap-1.5 text-gray-600 text-sm font-medium hover:text-presenz-blue transition px-2 py-1 rounded-lg hover:bg-gray-50"
+        aria-label="Change language"
+      >
+        <span className="text-base leading-none">{current.flag}</span>
+        <span>{current.short}</span>
+        <svg
+          className={`w-3 h-3 transition-transform ${open ? 'rotate-180' : ''}`}
+          fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24"
+        >
+          <path strokeLinecap="round" strokeLinejoin="round" d="m6 9 6 6 6-6" />
+        </svg>
+      </button>
+
+      {open && (
+        <div className="absolute right-0 top-full mt-2 w-44 bg-white border border-gray-100 rounded-2xl shadow-xl overflow-hidden z-50 py-1">
+          {LANGUAGES.map((l) => (
+            <button
+              key={l.code}
+              onClick={() => { setLang(l.code as LangCode); setOpen(false) }}
+              className={`w-full flex items-center gap-3 px-4 py-2.5 text-sm transition
+                ${lang === l.code
+                  ? 'bg-blue-50 text-presenz-blue font-semibold'
+                  : 'text-gray-700 hover:bg-gray-50'
+                }`}
+            >
+              <span className="text-base">{l.flag}</span>
+              <span>{l.label}</span>
+              {lang === l.code && (
+                <svg className="w-3.5 h-3.5 ml-auto text-presenz-blue" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="m5 13 4 4L19 7" />
+                </svg>
+              )}
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  )
+}
+
+// ─── Language grid (mobile drawer) ───────────────────────────────────────────
+function MobileLangGrid() {
+  const { lang, setLang } = useLanguage()
+  return (
+    <div>
+      <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Language</p>
+      <div className="grid grid-cols-5 gap-2">
+        {LANGUAGES.map((l) => (
+          <button
+            key={l.code}
+            onClick={() => setLang(l.code as LangCode)}
+            className={`flex flex-col items-center gap-0.5 p-2 rounded-xl text-xs transition
+              ${lang === l.code
+                ? 'bg-blue-50 ring-1 ring-presenz-blue text-presenz-blue font-bold'
+                : 'text-gray-600 hover:bg-gray-50'
+              }`}
+          >
+            <span className="text-lg">{l.flag}</span>
+            <span>{l.short}</span>
+          </button>
+        ))}
       </div>
     </div>
   )
@@ -66,6 +153,12 @@ export default function Navbar() {
   const [menuOpen,   setMenuOpen]   = useState(false)
   const [searchOpen, setSearchOpen] = useState(false)
   const pathname = usePathname()
+  const { t } = useLanguage()
+
+  const NAV_LINKS = [
+    { label: t.nav.home,  href: '/' },
+    { label: t.nav.about, href: '/about' },
+  ]
 
   return (
     <>
@@ -103,7 +196,7 @@ export default function Navbar() {
           <nav className="hidden md:flex gap-10 items-center absolute left-1/2 -translate-x-1/2">
             {NAV_LINKS.map(({ label, href }) => (
               <a
-                key={label}
+                key={href}
                 href={href}
                 className={`text-sm font-semibold tracking-wide transition ${
                   pathname === href ? 'text-presenz-blue' : 'text-gray-800 hover:text-presenz-blue'
@@ -115,7 +208,7 @@ export default function Navbar() {
           </nav>
 
           {/* ── Right side ── */}
-          <div className="hidden md:flex items-center gap-4 shrink-0">
+          <div className="hidden md:flex items-center gap-3 shrink-0">
             {/* Search */}
             <button
               onClick={() => setSearchOpen(true)}
@@ -126,8 +219,10 @@ export default function Navbar() {
                 <circle cx="11" cy="11" r="8" /><path d="m21 21-4.35-4.35" />
               </svg>
             </button>
-            {/* Language */}
-            <button className="text-gray-600 text-sm font-medium hover:opacity-70 transition">En</button>
+
+            {/* Language picker */}
+            <LanguagePicker />
+
             {/* Get App */}
             <a
               href={APPSTORE_URL}
@@ -135,7 +230,7 @@ export default function Navbar() {
               rel="noopener noreferrer"
               className="bg-presenz-blue hover:bg-blue-700 text-white px-5 py-2 rounded-full text-sm font-bold tracking-wide transition"
             >
-              Get App
+              {t.nav.getApp}
             </a>
           </div>
 
@@ -167,7 +262,7 @@ export default function Navbar() {
           <div className="md:hidden bg-white border-t border-gray-100 px-4 py-6 flex flex-col gap-4 shadow-lg">
             {NAV_LINKS.map(({ label, href }) => (
               <a
-                key={label}
+                key={href}
                 href={href}
                 className={`text-base font-semibold transition ${
                   pathname === href ? 'text-presenz-blue' : 'text-gray-800 hover:text-presenz-blue'
@@ -177,14 +272,21 @@ export default function Navbar() {
                 {label}
               </a>
             ))}
-            <div className="pt-4 border-t border-gray-100">
+
+            {/* Language grid */}
+            <div className="pt-3 border-t border-gray-100">
+              <MobileLangGrid />
+            </div>
+
+            {/* Get App button */}
+            <div className="pt-2">
               <a
                 href={APPSTORE_URL}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="block w-full text-center bg-presenz-blue hover:bg-blue-700 text-white px-4 py-2.5 rounded-full text-sm font-bold tracking-wide transition"
               >
-                Get App
+                {t.nav.getApp}
               </a>
             </div>
           </div>

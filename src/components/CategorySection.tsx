@@ -2,16 +2,18 @@
 
 import { useState } from 'react'
 import { imgCategory1, imgCategory2, imgCategory3, imgCategory4 } from '@/lib/images'
-
-const CATEGORIES = [
-  { img: imgCategory1, shadow: 'shadow-[0px_8px_40px_0px_#082def]', label: 'Music',   color: 'bg-presenz-blue' },
-  { img: imgCategory2, shadow: 'shadow-[0px_8px_40px_0px_#8ab83f]', label: 'Food',     color: 'bg-green-500' },
-  { img: imgCategory3, shadow: 'shadow-[0px_8px_40px_0px_#ff3d8b]', label: 'Night', color: 'bg-pink-500' },
-  { img: imgCategory4, shadow: 'shadow-[0px_8px_40px_0px_#007dd1]', label: 'Cinema', color: 'bg-blue-500' },
-]
+import { useLanguage } from '@/lib/LanguageContext'
 
 export default function CategorySection() {
   const [active, setActive] = useState(0)
+  const { t } = useLanguage()
+
+  const CATEGORIES = [
+    { img: imgCategory1, shadow: 'shadow-[0px_8px_40px_0px_#082def]', label: t.category.music, color: 'bg-presenz-blue' },
+    { img: imgCategory2, shadow: 'shadow-[0px_8px_40px_0px_#8ab83f]', label: t.category.food,  color: 'bg-green-500' },
+    { img: imgCategory3, shadow: 'shadow-[0px_8px_40px_0px_#ff3d8b]', label: t.category.night, color: 'bg-pink-500' },
+    { img: imgCategory4, shadow: 'shadow-[0px_8px_40px_0px_#007dd1]', label: t.category.cinema, color: 'bg-blue-500' },
+  ]
 
   return (
     <section className="py-16 sm:py-20 md:py-28 px-4 sm:px-6 lg:px-8 bg-white">
@@ -20,10 +22,10 @@ export default function CategorySection() {
         {/* Heading */}
         <div className="text-center mb-14">
           <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold mb-3 bg-gradient-to-r from-slate-900 to-blue-600 bg-clip-text text-transparent">
-            Explore by category
+            {t.category.heading}
           </h2>
           <p className="text-lg sm:text-xl text-presenz-navy opacity-70">
-            Discover what&apos;s happening now across the city
+            {t.category.subheading}
           </p>
         </div>
 
@@ -42,29 +44,14 @@ export default function CategorySection() {
               style={{ aspectRatio: '3/4' }}
               aria-label={`Browse ${cat.label}`}
             >
-              {/* Full image */}
-              <img
-                src={cat.img}
-                alt={cat.label}
-                className="absolute inset-0 w-full h-full object-cover"
-              />
-
-              {/* Gradient overlay at bottom */}
+              <img src={cat.img} alt={cat.label} className="absolute inset-0 w-full h-full object-cover" />
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent" />
-
-              {/* Label */}
               <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between">
-                <span className="text-white font-bold text-base sm:text-lg tracking-wide drop-shadow">
-                  {cat.label}
-                </span>
+                <span className="text-white font-bold text-base sm:text-lg tracking-wide drop-shadow">{cat.label}</span>
                 <span className={`${cat.color} w-2.5 h-2.5 rounded-full ring-2 ring-white`} />
               </div>
-
-              {/* Active indicator */}
               {active === idx && (
-                <div className="absolute top-3 right-3 bg-white rounded-full px-2 py-0.5 text-xs font-bold text-presenz-blue shadow">
-                  ●
-                </div>
+                <div className="absolute top-3 right-3 bg-white rounded-full px-2 py-0.5 text-xs font-bold text-presenz-blue shadow">●</div>
               )}
             </button>
           ))}
@@ -79,9 +66,7 @@ export default function CategorySection() {
               aria-selected={active === idx}
               onClick={() => setActive(idx)}
               className={`transition-all duration-300 rounded-full ${
-                active === idx
-                  ? 'bg-presenz-blue w-6 h-2'
-                  : 'bg-gray-300 w-2 h-2 hover:bg-gray-400'
+                active === idx ? 'bg-presenz-blue w-6 h-2' : 'bg-gray-300 w-2 h-2 hover:bg-gray-400'
               }`}
             />
           ))}

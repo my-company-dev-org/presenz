@@ -1,10 +1,14 @@
+'use client'
+
 import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
 import { APPSTORE_URL, PLAYSTORE_URL, imgGooglePlay, imgAppStore } from '@/lib/images'
 import Image from 'next/image'
+import { useLanguage } from '@/lib/LanguageContext'
 
 // ─── Section 1: Hero ──────────────────────────────────────────────────────────
 function AboutHero() {
+  const { t } = useLanguage()
   return (
     <section className="relative pt-36 pb-24 px-4 sm:px-6 lg:px-8 overflow-hidden text-center bg-white">
       {/* Top accent line */}
@@ -17,16 +21,16 @@ function AboutHero() {
       <div className="relative z-10 max-w-3xl mx-auto">
         <span className="inline-flex items-center gap-2 bg-blue-50 border border-blue-100 text-presenz-blue text-xs font-bold tracking-[0.2em] uppercase px-5 py-2 rounded-full mb-8">
           <span className="w-1.5 h-1.5 rounded-full bg-presenz-blue" />
-          Who We Are
+          {t.about.whoWeAre}
         </span>
 
         <h1 className="text-5xl sm:text-6xl md:text-7xl font-black text-gray-900 tracking-tight leading-[1.05] mb-6">
-          About{' '}
+          {t.about.heading}{' '}
           <span className="text-presenz-blue">Presenz.</span>
         </h1>
 
         <p className="text-lg sm:text-xl text-gray-500 max-w-xl mx-auto leading-relaxed">
-          A new kind of platform — built for presence, not performance.
+          {t.about.subheading}
         </p>
       </div>
     </section>
@@ -35,35 +39,39 @@ function AboutHero() {
 
 // ─── Section 2: Not social media ─────────────────────────────────────────────
 function NotSocialMedia() {
+  const { t } = useLanguage()
+
+  const cards = [
+    { icon: '🚫', title: t.about.noPerformanceTitle, desc: t.about.noPerformanceDesc },
+    { icon: '🔕', title: t.about.noAttentionTitle,   desc: t.about.noAttentionDesc },
+    { icon: '🌀', title: t.about.noContentTitle,     desc: t.about.noContentDesc },
+  ]
+
   return (
     <section className="py-20 sm:py-28 px-4 sm:px-6 lg:px-8 bg-gray-50">
       <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
 
         {/* Left: Big statement */}
         <div>
-          <p className="text-xs font-bold tracking-[0.2em] uppercase text-presenz-blue mb-4">Our Mission</p>
+          <p className="text-xs font-bold tracking-[0.2em] uppercase text-presenz-blue mb-4">{t.about.ourMission}</p>
           <h2 className="text-4xl sm:text-5xl font-black text-gray-900 leading-tight mb-6">
-            Presenz is not<br />
+            {t.about.missionHeading1}<br />
             <span className="relative inline-block">
-              social media.
+              {t.about.missionHeading2}
               <span className="absolute -bottom-1 left-0 right-0 h-1 bg-presenz-blue rounded-full" />
             </span>
           </h2>
           <p className="text-gray-500 text-lg leading-relaxed mb-6">
-            Presenz is a system for noticing culture as it happens in places, moments, and atmospheres.
+            {t.about.missionDesc}
           </p>
           <p className="text-gray-400 text-base leading-relaxed italic">
-            &ldquo;It exists to sense what is real, while it is still real.&rdquo;
+            {t.about.missionQuote}
           </p>
         </div>
 
         {/* Right: 3 hover cards */}
         <div className="flex flex-col gap-4">
-          {[
-            { icon: '🚫', title: 'No performance', desc: 'It does not ask people to perform or curate their moments.' },
-            { icon: '🔕', title: 'No attention reward', desc: 'It does not reward attention, likes, or engagement loops.' },
-            { icon: '🌀', title: 'No content machine', desc: 'It does not turn your presence into shareable content.' },
-          ].map(({ icon, title, desc }) => (
+          {cards.map(({ icon, title, desc }) => (
             <div key={title}
               className="group flex items-start gap-5 bg-white rounded-2xl px-6 py-5 border border-gray-100
                 shadow-sm hover:shadow-lg hover:-translate-y-1 hover:border-blue-100 transition-all duration-300 cursor-default"
@@ -84,24 +92,25 @@ function NotSocialMedia() {
 
 // ─── Section 3: Our belief ────────────────────────────────────────────────────
 function OurBelief() {
+  const { t } = useLanguage()
   return (
     <section className="py-20 sm:py-28 px-4 sm:px-6 lg:px-8 bg-white overflow-hidden">
       <div className="max-w-6xl mx-auto">
 
         {/* Heading */}
         <div className="text-center mb-16">
-          <p className="text-xs font-bold tracking-[0.2em] uppercase text-presenz-blue mb-3">Philosophy</p>
-          <h2 className="text-4xl sm:text-5xl font-black text-gray-900">Our belief</h2>
+          <p className="text-xs font-bold tracking-[0.2em] uppercase text-presenz-blue mb-3">{t.about.philosophy}</p>
+          <h2 className="text-4xl sm:text-5xl font-black text-gray-900">{t.about.ourBelief}</h2>
         </div>
 
         {/* Quote block */}
         <div className="relative max-w-3xl mx-auto mb-16">
           <div className="absolute -top-6 -left-4 text-8xl text-blue-100 font-serif leading-none select-none">&ldquo;</div>
           <div className="relative z-10 text-center space-y-3">
-            <p className="text-xl sm:text-2xl font-bold text-gray-800">Culture doesn&apos;t need permission.</p>
+            <p className="text-xl sm:text-2xl font-bold text-gray-800">{t.about.beliefQuote1}</p>
             <div className="text-base sm:text-lg text-gray-500 leading-relaxed space-y-1">
-              <p>It happens in streets. In sound. In walls.</p>
-              <p>In moments that pass before anyone names them.</p>
+              <p>{t.about.beliefLine1}</p>
+              <p>{t.about.beliefLine2}</p>
             </div>
           </div>
         </div>
@@ -112,7 +121,7 @@ function OurBelief() {
             border border-blue-100 rounded-2xl px-8 py-5 shadow-sm">
             <span className="text-2xl">✦</span>
             <p className="text-lg font-black text-gray-900 tracking-wide">
-              Culture is not content. It is{' '}
+              {t.about.beliefTagline.replace('PRESENZ', '')}{' '}
               <span className="text-presenz-blue">PRESENZ.</span>
             </p>
           </div>
@@ -124,40 +133,42 @@ function OurBelief() {
 }
 
 // ─── Section 4: Three cards ───────────────────────────────────────────────────
-const CARDS = [
-  {
-    emoji: '🧘',
-    title: 'No pressure',
-    lines: ['No performance.', 'No followers.', 'No pressure.'],
-    gradient: 'from-blue-50 to-indigo-50',
-    accent: 'bg-blue-500',
-    hover: 'hover:shadow-blue-100',
-  },
-  {
-    emoji: '🚫',
-    title: 'No feeds',
-    lines: ['No feeds.', 'No rankings.', 'No validation loops.'],
-    gradient: 'from-violet-50 to-purple-50',
-    accent: 'bg-violet-500',
-    hover: 'hover:shadow-violet-100',
-  },
-  {
-    emoji: '🏆',
-    title: 'Nothing to win',
-    lines: ['Nothing to win.', 'Nothing to compare.'],
-    gradient: 'from-indigo-50 to-blue-50',
-    accent: 'bg-indigo-500',
-    hover: 'hover:shadow-indigo-100',
-  },
-]
-
 function BeliefCards() {
+  const { t } = useLanguage()
+
+  const CARDS = [
+    {
+      emoji: '🧘',
+      title: t.about.card1Title,
+      lines: t.about.card1Lines,
+      gradient: 'from-blue-50 to-indigo-50',
+      accent: 'bg-blue-500',
+      hover: 'hover:shadow-blue-100',
+    },
+    {
+      emoji: '🚫',
+      title: t.about.card2Title,
+      lines: t.about.card2Lines,
+      gradient: 'from-violet-50 to-purple-50',
+      accent: 'bg-violet-500',
+      hover: 'hover:shadow-violet-100',
+    },
+    {
+      emoji: '🏆',
+      title: t.about.card3Title,
+      lines: t.about.card3Lines,
+      gradient: 'from-indigo-50 to-blue-50',
+      accent: 'bg-indigo-500',
+      hover: 'hover:shadow-indigo-100',
+    },
+  ]
+
   return (
     <section className="py-20 sm:py-28 px-4 sm:px-6 lg:px-8 bg-gray-50">
       <div className="max-w-5xl mx-auto">
         <div className="text-center mb-14">
-          <p className="text-xs font-bold tracking-[0.2em] uppercase text-presenz-blue mb-3">Values</p>
-          <h2 className="text-4xl sm:text-5xl font-black text-gray-900">What we stand for</h2>
+          <p className="text-xs font-bold tracking-[0.2em] uppercase text-presenz-blue mb-3">{t.about.values}</p>
+          <h2 className="text-4xl sm:text-5xl font-black text-gray-900">{t.about.whatWeStandFor}</h2>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
@@ -190,6 +201,14 @@ function BeliefCards() {
 
 // ─── Section 5: CTA ───────────────────────────────────────────────────────────
 function CtaSection() {
+  const { t } = useLanguage()
+
+  const ctas = [
+    [t.about.ctaLine1a, t.about.ctaLine1b],
+    [t.about.ctaLine2a, t.about.ctaLine2b],
+    [t.about.ctaLine3a, t.about.ctaLine3b],
+  ]
+
   return (
     <section className="relative py-24 sm:py-32 px-4 sm:px-6 lg:px-8 overflow-hidden"
       style={{ background: 'linear-gradient(135deg, #eef2ff 0%, #e0e7ff 40%, #ede9fe 100%)' }}
@@ -204,11 +223,7 @@ function CtaSection() {
 
       <div className="relative z-10 max-w-xl mx-auto text-center">
         <div className="space-y-8 mb-14">
-          {[
-            ["You don't post.", "You notice."],
-            ["You don't scroll.", "You sense."],
-            ["You don't perform.", "You are present."],
-          ].map(([a, b], i) => (
+          {ctas.map(([a, b], i) => (
             <div key={i} className="space-y-1">
               <p className="text-xl sm:text-2xl font-semibold text-gray-400">{a}</p>
               <p className="text-2xl sm:text-3xl font-black text-gray-900">{b}</p>
@@ -224,7 +239,7 @@ function CtaSection() {
             px-16 py-4 rounded-2xl transition-all shadow-xl shadow-blue-200
             hover:shadow-2xl hover:shadow-blue-300 hover:scale-105 active:scale-95"
         >
-          Get App
+          {t.about.getApp}
         </a>
       </div>
     </section>

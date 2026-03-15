@@ -1,5 +1,8 @@
+'use client'
+
 import Image from 'next/image'
 import { imgLogo, APPSTORE_URL } from '@/lib/images'
+import { useLanguage } from '@/lib/LanguageContext'
 
 const SOCIAL = [
   {
@@ -45,6 +48,7 @@ const SOCIAL = [
 ]
 
 export default function Footer() {
+  const { t } = useLanguage()
   const year = new Date().getFullYear()
 
   return (
@@ -60,9 +64,9 @@ export default function Footer() {
 
         {/* Nav links */}
         <nav className="flex items-center gap-6">
-          <a href="/"           className="text-sm font-semibold text-gray-700 hover:text-presenz-blue transition">Home</a>
-          <a href="/about"      className="text-sm font-semibold text-gray-700 hover:text-presenz-blue transition">About</a>
-          <a href={APPSTORE_URL} target="_blank" rel="noopener noreferrer" className="text-sm font-semibold text-gray-700 hover:text-presenz-blue transition">Download app</a>
+          <a href="/"           className="text-sm font-semibold text-gray-700 hover:text-presenz-blue transition">{t.footer.home}</a>
+          <a href="/about"      className="text-sm font-semibold text-gray-700 hover:text-presenz-blue transition">{t.footer.about}</a>
+          <a href={APPSTORE_URL} target="_blank" rel="noopener noreferrer" className="text-sm font-semibold text-gray-700 hover:text-presenz-blue transition">{t.footer.downloadApp}</a>
         </nav>
       </div>
 
@@ -74,9 +78,9 @@ export default function Footer() {
 
         {/* Copyright + legal */}
         <div className="flex flex-wrap items-center gap-4 text-sm text-gray-400">
-          <span>&copy; {year} Presenz-IntusLab Inc. All rights reserved.</span>
-          <a href="/privacy"  className="hover:text-gray-600 transition">Privacy Policy</a>
-          <a href="/terms"    className="hover:text-gray-600 transition">Terms of Service</a>
+          <span>&copy; {year} {t.footer.rights}</span>
+          <a href="/privacy"  className="hover:text-gray-600 transition">{t.footer.privacy}</a>
+          <a href="/terms"    className="hover:text-gray-600 transition">{t.footer.terms}</a>
         </div>
 
         {/* Social icons */}

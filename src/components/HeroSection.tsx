@@ -1,7 +1,12 @@
+'use client'
+
 import Image from 'next/image'
 import { imgHeroBg, imgGooglePlay, imgAppStore, APPSTORE_URL, PLAYSTORE_URL } from '@/lib/images'
+import { useLanguage } from '@/lib/LanguageContext'
 
 export default function HeroSection() {
+  const { t } = useLanguage()
+
   return (
     <section
       className="relative w-full pt-20 pb-8 sm:pt-24 sm:pb-12 md:pt-32 md:pb-16 lg:pt-40 lg:pb-20 min-h-screen md:min-h-[700px]"
@@ -23,17 +28,17 @@ export default function HeroSection() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="max-w-2xl">
           <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-4 text-presenz-navy">
-            Different Vibes.<br />Different Places
+            {t.hero.heading1}<br />{t.hero.heading2}
           </h1>
           <p className="text-lg sm:text-2xl md:text-4xl font-black text-presenz-blue mb-4">
-            Just PRESENZ.
+            {t.hero.tagline}
           </p>
           <p className="text-base sm:text-lg md:text-xl text-presenz-navy mb-8 max-w-md opacity-80">
-            Discover art, music, fashion, culture happening live near you.
+            {t.hero.description}
           </p>
 
           <button className="bg-presenz-blue hover:bg-blue-700 text-white font-semibold py-2.5 sm:py-3 px-7 sm:px-9 rounded-full transition mb-10 text-sm sm:text-base shadow-lg shadow-blue-200">
-            Leave a Presenz
+            {t.hero.cta}
           </button>
 
           {/* App store badges */}

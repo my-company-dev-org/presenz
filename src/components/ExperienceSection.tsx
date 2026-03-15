@@ -1,23 +1,29 @@
-const EVENT_CARDS = [
-  {
-    tag: 'ART',
-    tagColor: 'text-purple-600',
-    tagBg: 'bg-red-50',
-    title: 'Contemporary Exhibition',
-    venue: 'Fondation Beyeler',
-    time: 'Now – 6:00 PM',
-  },
-  {
-    tag: 'MUSIC',
-    tagColor: 'text-blue-600',
-    tagBg: 'bg-blue-50',
-    title: 'Jazz Night Sessions',
-    venue: 'Blue Note Club',
-    time: '8:00 PM – Late',
-  },
-]
+'use client'
+
+import { useLanguage } from '@/lib/LanguageContext'
 
 export default function ExperienceSection() {
+  const { t } = useLanguage()
+
+  const EVENT_CARDS = [
+    {
+      tag: t.experience.cardArtTag,
+      tagColor: 'text-purple-600',
+      tagBg: 'bg-red-50',
+      title: t.experience.cardArtTitle,
+      venue: t.experience.cardArtVenue,
+      time: t.experience.cardArtTime,
+    },
+    {
+      tag: t.experience.cardMusicTag,
+      tagColor: 'text-blue-600',
+      tagBg: 'bg-blue-50',
+      title: t.experience.cardMusicTitle,
+      venue: t.experience.cardMusicVenue,
+      time: t.experience.cardMusicTime,
+    },
+  ]
+
   return (
     <section className="py-12 sm:py-16 md:py-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-purple-50 to-pink-50">
       <div className="max-w-7xl mx-auto">
@@ -25,11 +31,10 @@ export default function ExperienceSection() {
           {/* Heading */}
           <div>
             <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-slate-900 to-blue-600 bg-clip-text text-transparent">
-              A new way to experience culture.
+              {t.experience.heading}
             </h2>
             <p className="text-lg sm:text-xl text-presenz-navy leading-relaxed">
-              Presenz brings together live art, music, fashion, cinema, and city energy into one living
-              map visible only while it&apos;s happening.
+              {t.experience.description}
             </p>
           </div>
 
@@ -48,7 +53,7 @@ export default function ExperienceSection() {
                 <p className="text-gray-600 text-sm mb-4">{card.time}</p>
                 <div className="flex items-center gap-2">
                   <div className="w-2.5 h-2.5 bg-green-500 rounded-full" />
-                  <span className="text-green-500 font-bold text-sm">LIVE NOW</span>
+                  <span className="text-green-500 font-bold text-sm">{t.experience.liveNow}</span>
                 </div>
               </div>
             ))}
