@@ -72,7 +72,7 @@ export default function CategorySection() {
 
         {/* Pagination dots */}
         <div className="flex justify-center gap-2" role="tablist">
-          {CATEGORIES.map((cat, idx) => (
+          {CATEGORIES.map((_, idx) => (
             <button
               key={idx}
               role="tab"

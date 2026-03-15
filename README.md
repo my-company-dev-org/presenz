@@ -135,6 +135,75 @@ Defined in `tailwind.config.ts`:
 
 ---
 
+## 🐳 Docker
+
+### ▶ Run in background (recommended — permanent)
+
+```bash
+docker compose up -d --build
+```
+
+- `-d` = detached mode (runs in background)
+- `--build` = rebuilds the image from latest code
+- `restart: always` in compose ensures it auto-restarts on crash or system reboot
+
+Open [http://localhost:3000](http://localhost:3000)
+
+---
+
+### 🔧 Useful commands
+
+```bash
+# View running containers
+docker ps
+
+# View live logs
+docker logs -f presenz-web
+
+# Stop the container (keeps it, just stops)
+docker compose stop
+
+# Stop and remove container
+docker compose down
+
+# Rebuild and restart after code changes
+docker compose up -d --build
+
+# Restart without rebuild
+docker compose restart
+```
+
+---
+
+### Or run manually with Docker (no compose)
+
+```bash
+# Build the image
+docker build -t presenz-web .
+
+# Run in background permanently
+docker run -d \
+  --name presenz-web \
+  --restart always \
+  -p 3000:3000 \
+  presenz-web
+```
+
+---
+
+### Docker details
+
+| Detail | Value |
+|--------|-------|
+| Base image | `node:20-alpine` |
+| Exposed port | `3000` |
+| Build strategy | Multi-stage (deps → builder → runner) |
+| Output mode | `standalone` (minimal runtime, no node_modules needed) |
+| Restart policy | `always` (survives reboots and crashes) |
+| Runs as | Non-root user `nextjs` (uid 1001) |
+
+---
+
 ## 📦 Scripts
 
 | Script | Description |

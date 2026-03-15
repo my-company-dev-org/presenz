@@ -1,0 +1,11 @@
+services:
+  presenz-web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: presenz-web
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+    restart: always        # auto-restart on crash, reboot, or Docker daemon restart

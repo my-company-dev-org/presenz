@@ -1,5 +1,5 @@
 import Image from 'next/image'
-import { imgLogo, APPSTORE_URL, PLAYSTORE_URL } from '@/lib/images'
+import { imgLogo, APPSTORE_URL } from '@/lib/images'
 
 const SOCIAL = [
   {
