@@ -2,62 +2,138 @@
 
 import { useLanguage } from '@/lib/LanguageContext'
 
+// 3 event cards matching image2 exactly
+const CARDS = [
+  {
+    tag: 'ART',
+    tagStyle: { background: '#ffe0ec', color: '#d4006a' },
+    accentColor: '#d4006a',
+    title: 'Contemporary Exhibition',
+    venue: 'Fondation Beyeler',
+    time: 'Now – 6:00 PM',
+    live: false,
+    zIndex: 1,
+    top: '0px', left: '0px',
+  },
+  {
+    tag: 'MUSIC',
+    tagStyle: { background: '#e0e8ff', color: '#1a3fff' },
+    accentColor: '#1a3fff',
+    title: 'Jazz Night Sessions',
+    venue: 'Blue Note Club',
+    time: '8:00 PM – Late',
+    live: false,
+    zIndex: 2,
+    top: '70px', left: '60px',
+  },
+  {
+    tag: 'NIGHTLIFE',
+    tagStyle: { background: '#ffe0ec', color: '#d4006a' },
+    accentColor: '#d4006a',
+    title: 'Warehouse Opening',
+    venue: 'District 5',
+    time: '10:00 PM – 4:00 AM',
+    live: true,
+    zIndex: 3,
+    top: '185px', left: '110px',
+  },
+]
+
 export default function ExperienceSection() {
   const { t } = useLanguage()
 
-  const EVENT_CARDS = [
-    {
-      tag: t.experience.cardArtTag,
-      tagColor: 'text-purple-600',
-      tagBg: 'bg-red-50',
-      title: t.experience.cardArtTitle,
-      venue: t.experience.cardArtVenue,
-      time: t.experience.cardArtTime,
-    },
-    {
-      tag: t.experience.cardMusicTag,
-      tagColor: 'text-blue-600',
-      tagBg: 'bg-blue-50',
-      title: t.experience.cardMusicTitle,
-      venue: t.experience.cardMusicVenue,
-      time: t.experience.cardMusicTime,
-    },
-  ]
-
   return (
-    <section className="py-12 sm:py-16 md:py-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-purple-50 to-pink-50">
+    <section
+      className="w-full py-16 sm:py-20 md:py-28 px-4 sm:px-6 lg:px-8 overflow-hidden"
+      style={{
+        background: 'linear-gradient(135deg, #ccd8ff 0%, #9aa8f0 30%, #4455cc 70%, #3344bb 100%)',
+      }}
+    >
       <div className="max-w-7xl mx-auto">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12 items-center">
-          {/* Heading */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 md:gap-16 items-center">
+
+          {/* ── Left: heading + body ── */}
           <div>
-            <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-slate-900 to-blue-600 bg-clip-text text-transparent">
-              {t.experience.heading}
+            <h2
+              className="font-black leading-tight mb-6"
+              style={{ fontSize: 'clamp(2.2rem, 4.5vw, 3.8rem)', color: '#0d1b5e' }}
+            >
+              A new way to<br />
+              experience{' '}
+              <span style={{ color: '#1a3fff' }}>culture.</span>
             </h2>
-            <p className="text-lg sm:text-xl text-presenz-navy leading-relaxed">
+            <p
+              className="text-base sm:text-lg leading-relaxed"
+              style={{ color: '#0d1b5e', maxWidth: '460px', opacity: 0.85 }}
+            >
               {t.experience.description}
             </p>
           </div>
 
-          {/* Event cards */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {EVENT_CARDS.map((card) => (
+          {/* ── Right: stacked overlapping cards — desktop ── */}
+          <div className="hidden lg:block relative" style={{ height: '420px' }}>
+            {CARDS.map((card) => (
               <div
                 key={card.tag}
-                className="bg-white rounded-2xl p-6 border border-gray-200 shadow-lg hover:shadow-xl transition"
+                className="absolute bg-white rounded-2xl shadow-2xl p-5"
+                style={{
+                  width: '260px',
+                  top: card.top,
+                  left: card.left,
+                  zIndex: card.zIndex,
+                  borderBottom: `3px solid ${card.accentColor}`,
+                }}
               >
-                <div className={`${card.tagBg} inline-block px-3 py-1 rounded-full mb-4`}>
-                  <span className={`${card.tagColor} font-bold text-xs`}>{card.tag}</span>
-                </div>
-                <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-4">{card.title}</h3>
-                <p className="text-gray-600 font-normal mb-2">{card.venue}</p>
-                <p className="text-gray-600 text-sm mb-4">{card.time}</p>
-                <div className="flex items-center gap-2">
-                  <div className="w-2.5 h-2.5 bg-green-500 rounded-full" />
-                  <span className="text-green-500 font-bold text-sm">{t.experience.liveNow}</span>
-                </div>
+                <span
+                  className="inline-block text-xs font-bold px-3 py-1 rounded-full mb-3"
+                  style={card.tagStyle}
+                >
+                  {card.tag}
+                </span>
+                <h3 className="font-bold text-lg mb-3" style={{ color: '#0d1b5e' }}>{card.title}</h3>
+                <p className="text-sm text-gray-400 mb-1">{card.venue}</p>
+                <p className="text-sm text-gray-400 mb-3">{card.time}</p>
+                {card.live && (
+                  <div className="flex items-center gap-2">
+                    <div className="w-2 h-2 rounded-full animate-pulse" style={{ background: '#22c55e' }} />
+                    <span className="text-xs font-bold" style={{ color: '#22c55e' }}>
+                      {t.experience.liveNow}
+                    </span>
+                  </div>
+                )}
               </div>
             ))}
           </div>
+
+          {/* ── Right: flat stacked cards — mobile/tablet ── */}
+          <div className="lg:hidden flex flex-col gap-4">
+            {CARDS.map((card) => (
+              <div
+                key={card.tag}
+                className="bg-white rounded-2xl shadow-xl p-5"
+                style={{ borderBottom: `3px solid ${card.accentColor}` }}
+              >
+                <span
+                  className="inline-block text-xs font-bold px-3 py-1 rounded-full mb-3"
+                  style={card.tagStyle}
+                >
+                  {card.tag}
+                </span>
+                <h3 className="font-bold text-lg mb-2" style={{ color: '#0d1b5e' }}>{card.title}</h3>
+                <p className="text-sm text-gray-400 mb-1">{card.venue}</p>
+                <p className="text-sm text-gray-400 mb-2">{card.time}</p>
+                {card.live && (
+                  <div className="flex items-center gap-2">
+                    <div className="w-2 h-2 rounded-full animate-pulse" style={{ background: '#22c55e' }} />
+                    <span className="text-xs font-bold" style={{ color: '#22c55e' }}>
+                      {t.experience.liveNow}
+                    </span>
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+
         </div>
       </div>
     </section>

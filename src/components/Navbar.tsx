@@ -6,7 +6,7 @@ import Image from 'next/image'
 import { imgLogo, APPSTORE_URL } from '@/lib/images'
 import { useLanguage, LANGUAGES, LangCode } from '@/lib/LanguageContext'
 
-// ─── Search overlay ───────────────────────────────────────────────────────────
+// ─── Search overlay ────────────────────────────────────────────────────────────
 function SearchOverlay({ onClose }: { onClose: () => void }) {
   const [query, setQuery] = useState('')
   const { t } = useLanguage()
@@ -37,9 +37,7 @@ function SearchOverlay({ onClose }: { onClose: () => void }) {
         </div>
         {query.length === 0 && (
           <div className="px-5 py-4">
-            <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">
-              {t.nav.popularLabel}
-            </p>
+            <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">{t.nav.popularLabel}</p>
             {t.nav.popularSearches.map((s) => (
               <button
                 key={s}
@@ -53,8 +51,7 @@ function SearchOverlay({ onClose }: { onClose: () => void }) {
         )}
         {query.length > 0 && (
           <div className="px-5 py-4 text-sm text-gray-500">
-            {t.nav.searchingFor}{' '}
-            <span className="font-semibold text-gray-800">&ldquo;{query}&rdquo;</span>…
+            {t.nav.searchingFor} <span className="font-semibold text-gray-800">&ldquo;{query}&rdquo;</span>…
           </div>
         )}
       </div>
@@ -62,12 +59,11 @@ function SearchOverlay({ onClose }: { onClose: () => void }) {
   )
 }
 
-// ─── Language picker dropdown (desktop) ──────────────────────────────────────
+// ─── Language dropdown ────────────────────────────────────────────────────────
 function LanguagePicker() {
   const { lang, setLang } = useLanguage()
   const [open, setOpen] = useState(false)
   const ref = useRef<HTMLDivElement>(null)
-
   const current = LANGUAGES.find((l) => l.code === lang) ?? LANGUAGES[0]
 
   useEffect(() => {
@@ -80,15 +76,16 @@ function LanguagePicker() {
 
   return (
     <div ref={ref} className="relative">
+      {/* Matches client design: "En ▼" simple text button */}
       <button
         onClick={() => setOpen((v) => !v)}
-        className="flex items-center gap-1.5 text-gray-600 text-sm font-medium hover:text-presenz-blue transition px-2 py-1 rounded-lg hover:bg-gray-50"
+        className="flex items-center gap-1 text-sm font-medium transition"
+        style={{ color: '#0d1b5e' }}
         aria-label="Change language"
       >
-        <span className="text-base leading-none">{current.flag}</span>
         <span>{current.short}</span>
         <svg
-          className={`w-3 h-3 transition-transform ${open ? 'rotate-180' : ''}`}
+          className={`w-3.5 h-3.5 transition-transform ${open ? 'rotate-180' : ''}`}
           fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24"
         >
           <path strokeLinecap="round" strokeLinejoin="round" d="m6 9 6 6 6-6" />
@@ -101,16 +98,13 @@ function LanguagePicker() {
             <button
               key={l.code}
               onClick={() => { setLang(l.code as LangCode); setOpen(false) }}
-              className={`w-full flex items-center gap-3 px-4 py-2.5 text-sm transition
-                ${lang === l.code
-                  ? 'bg-blue-50 text-presenz-blue font-semibold'
-                  : 'text-gray-700 hover:bg-gray-50'
-                }`}
+              className="w-full flex items-center gap-3 px-4 py-2.5 text-sm transition hover:bg-gray-50"
+              style={{ color: lang === l.code ? '#1a3fff' : '#374151', fontWeight: lang === l.code ? 700 : 400 }}
             >
               <span className="text-base">{l.flag}</span>
               <span>{l.label}</span>
               {lang === l.code && (
-                <svg className="w-3.5 h-3.5 ml-auto text-presenz-blue" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24">
+                <svg className="w-3.5 h-3.5 ml-auto" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" d="m5 13 4 4L19 7" />
                 </svg>
               )}
@@ -122,7 +116,7 @@ function LanguagePicker() {
   )
 }
 
-// ─── Language grid (mobile drawer) ───────────────────────────────────────────
+// ─── Mobile language grid ─────────────────────────────────────────────────────
 function MobileLangGrid() {
   const { lang, setLang } = useLanguage()
   return (
@@ -133,11 +127,13 @@ function MobileLangGrid() {
           <button
             key={l.code}
             onClick={() => setLang(l.code as LangCode)}
-            className={`flex flex-col items-center gap-0.5 p-2 rounded-xl text-xs transition
-              ${lang === l.code
-                ? 'bg-blue-50 ring-1 ring-presenz-blue text-presenz-blue font-bold'
-                : 'text-gray-600 hover:bg-gray-50'
-              }`}
+            className="flex flex-col items-center gap-0.5 p-2 rounded-xl text-xs transition"
+            style={{
+              background: lang === l.code ? '#eef2ff' : 'transparent',
+              color: lang === l.code ? '#1a3fff' : '#6b7280',
+              fontWeight: lang === l.code ? 700 : 400,
+              outline: lang === l.code ? '1px solid #1a3fff' : 'none',
+            }}
           >
             <span className="text-lg">{l.flag}</span>
             <span>{l.short}</span>
@@ -148,15 +144,15 @@ function MobileLangGrid() {
   )
 }
 
-// ─── Navbar ───────────────────────────────────────────────────────────────────
+// ─── Navbar ────────────────────────────────────────────────────────────────────
 export default function Navbar() {
-  const [menuOpen,   setMenuOpen]   = useState(false)
+  const [menuOpen, setMenuOpen] = useState(false)
   const [searchOpen, setSearchOpen] = useState(false)
   const pathname = usePathname()
   const { t } = useLanguage()
 
   const NAV_LINKS = [
-    { label: t.nav.home,  href: '/' },
+    { label: t.nav.home, href: '/' },
     { label: t.nav.about, href: '/about' },
   ]
 
@@ -167,28 +163,28 @@ export default function Navbar() {
       <header
         className="fixed top-0 left-0 right-0 z-50 w-full"
         style={{
-          background: 'rgba(255,255,255,0.75)',
-          backdropFilter: 'blur(14px)',
-          WebkitBackdropFilter: 'blur(14px)',
+          background: 'rgba(255,255,255,0.88)',
+          backdropFilter: 'blur(16px)',
+          WebkitBackdropFilter: 'blur(16px)',
           borderBottom: '1px solid rgba(0,0,0,0.06)',
         }}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
 
-          {/* ── Logo ── */}
-          <a href="/" className="flex items-center gap-3 shrink-0">
+          {/* ── Logo — matches client: pin icon + "Presenz" text ── */}
+          <a href="/" className="flex items-center gap-2.5 shrink-0">
             <Image
               src={imgLogo}
               alt="PresenZ logo"
-              width={40}
-              height={40}
-              className="w-10 h-10 object-contain"
+              width={32}
+              height={32}
+              className="w-8 h-8 object-contain"
             />
             <span
-              className="text-xl font-black tracking-[0.18em] uppercase text-gray-900 hidden sm:inline"
-              style={{ fontFamily: 'var(--font-inter), Inter, sans-serif', letterSpacing: '0.18em' }}
+              className="text-base font-bold hidden sm:inline"
+              style={{ color: '#0d1b5e', letterSpacing: '0.01em' }}
             >
-              PRESENZ
+              Presenz
             </span>
           </a>
 
@@ -198,9 +194,11 @@ export default function Navbar() {
               <a
                 key={href}
                 href={href}
-                className={`text-sm font-semibold tracking-wide transition ${
-                  pathname === href ? 'text-presenz-blue' : 'text-gray-800 hover:text-presenz-blue'
-                }`}
+                className="text-sm tracking-wide transition"
+                style={{
+                  color: '#0d1b5e',
+                  fontWeight: pathname === href ? 700 : 500,
+                }}
               >
                 {label}
               </a>
@@ -208,27 +206,27 @@ export default function Navbar() {
           </nav>
 
           {/* ── Right side ── */}
-          <div className="hidden md:flex items-center gap-3 shrink-0">
-            {/* Search */}
+          <div className="hidden md:flex items-center gap-4 shrink-0">
+            {/* Search icon */}
             <button
               onClick={() => setSearchOpen(true)}
               aria-label="Search"
-              className="text-gray-600 hover:text-presenz-blue transition"
+              className="transition opacity-70 hover:opacity-100"
+              style={{ color: '#0d1b5e' }}
             >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
                 <circle cx="11" cy="11" r="8" /><path d="m21 21-4.35-4.35" />
               </svg>
             </button>
-
-            {/* Language picker */}
+            {/* Language "En ▼" */}
             <LanguagePicker />
-
-            {/* Get App */}
+            {/* Get App pill — matches client blue button */}
             <a
               href={APPSTORE_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="bg-presenz-blue hover:bg-blue-700 text-white px-5 py-2 rounded-full text-sm font-bold tracking-wide transition"
+              className="px-5 py-2 rounded-full text-sm font-bold tracking-wide transition hover:opacity-90"
+              style={{ background: '#1a3fff', color: '#fff' }}
             >
               {t.nav.getApp}
             </a>
@@ -239,7 +237,8 @@ export default function Navbar() {
             <button
               onClick={() => setSearchOpen(true)}
               aria-label="Search"
-              className="text-gray-600 hover:text-presenz-blue transition"
+              className="opacity-70 hover:opacity-100"
+              style={{ color: '#0d1b5e' }}
             >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
                 <circle cx="11" cy="11" r="8" /><path d="m21 21-4.35-4.35" />
@@ -250,9 +249,9 @@ export default function Navbar() {
               onClick={() => setMenuOpen((v) => !v)}
               aria-label="Toggle navigation"
             >
-              <span className={`block w-6 h-0.5 bg-gray-800 transition-transform duration-300 ${menuOpen ? 'translate-y-2 rotate-45' : ''}`} />
-              <span className={`block w-6 h-0.5 bg-gray-800 transition-opacity duration-300 ${menuOpen ? 'opacity-0' : ''}`} />
-              <span className={`block w-6 h-0.5 bg-gray-800 transition-transform duration-300 ${menuOpen ? '-translate-y-2 -rotate-45' : ''}`} />
+              <span className={`block w-6 h-0.5 transition-transform duration-300 ${menuOpen ? 'translate-y-2 rotate-45' : ''}`} style={{ background: '#0d1b5e' }} />
+              <span className={`block w-6 h-0.5 transition-opacity duration-300 ${menuOpen ? 'opacity-0' : ''}`} style={{ background: '#0d1b5e' }} />
+              <span className={`block w-6 h-0.5 transition-transform duration-300 ${menuOpen ? '-translate-y-2 -rotate-45' : ''}`} style={{ background: '#0d1b5e' }} />
             </button>
           </div>
         </div>
@@ -264,27 +263,23 @@ export default function Navbar() {
               <a
                 key={href}
                 href={href}
-                className={`text-base font-semibold transition ${
-                  pathname === href ? 'text-presenz-blue' : 'text-gray-800 hover:text-presenz-blue'
-                }`}
+                className="text-base transition"
+                style={{ color: '#0d1b5e', fontWeight: pathname === href ? 700 : 500 }}
                 onClick={() => setMenuOpen(false)}
               >
                 {label}
               </a>
             ))}
-
-            {/* Language grid */}
             <div className="pt-3 border-t border-gray-100">
               <MobileLangGrid />
             </div>
-
-            {/* Get App button */}
             <div className="pt-2">
               <a
                 href={APPSTORE_URL}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="block w-full text-center bg-presenz-blue hover:bg-blue-700 text-white px-4 py-2.5 rounded-full text-sm font-bold tracking-wide transition"
+                className="block w-full text-center text-white text-sm font-bold py-2.5 rounded-full transition hover:opacity-90"
+                style={{ background: '#1a3fff' }}
               >
                 {t.nav.getApp}
               </a>

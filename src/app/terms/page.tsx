@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
+import { useLanguage } from '@/lib/LanguageContext'
 
 const TERMS_SECTIONS = [
   {
@@ -317,6 +318,7 @@ function AccordionItem({
 // ─── Page ─────────────────────────────────────────────────────────────────────
 export default function TermsPage() {
   const [openIndex, setOpenIndex] = useState<number | null>(0)
+  const { t } = useLanguage()
 
   return (
     <div className="bg-white min-h-screen">
@@ -331,15 +333,14 @@ export default function TermsPage() {
         <div className="relative z-10 max-w-2xl mx-auto">
           <span className="inline-flex items-center gap-2 bg-blue-50 border border-blue-100 text-presenz-blue text-xs font-bold tracking-[0.2em] uppercase px-5 py-2 rounded-full mb-6">
             <span className="w-1.5 h-1.5 rounded-full bg-presenz-blue" />
-            Legal
+            {t.legal.legalLabel}
           </span>
           <h1 className="text-5xl sm:text-6xl font-black text-gray-900 mb-4">
-            Terms &amp; <span className="text-presenz-blue">Conditions</span>
+            {t.legal.termsTitle.split('&')[0]}&amp; <span className="text-presenz-blue">{t.legal.termsTitle.split('&')[1]?.trim() || 'Conditions'}</span>
           </h1>
-          <p className="text-gray-500 text-lg">Last updated: February 2026</p>
+          <p className="text-gray-500 text-lg">{t.legal.lastUpdated}</p>
           <p className="text-gray-400 text-sm mt-3 max-w-lg mx-auto">
-            By accessing, installing, registering for, or using PRESENZ, you confirm that you have read,
-            understood, and agree to be legally bound by these Terms.
+            {t.legal.termsIntro}
           </p>
         </div>
       </section>
@@ -347,7 +348,7 @@ export default function TermsPage() {
       {/* ── Quick-nav pills ── */}
       <div className="sticky top-16 z-40 bg-white/90 backdrop-blur border-b border-gray-100">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 py-3 flex items-center gap-2">
-          <span className="text-xs font-semibold text-gray-400 uppercase tracking-wider shrink-0">Jump to:</span>
+          <span className="text-xs font-semibold text-gray-400 uppercase tracking-wider shrink-0">{t.legal.jumpTo}</span>
           <div className="flex gap-2 overflow-x-auto scrollbar-hide">
             {['Eligibility','Wallet & PSZ','User Conduct','Liability','Contact'].map((label) => {
               const indexMap: Record<string, number> = { 'Eligibility': 2, 'Wallet & PSZ': 7, 'User Conduct': 9, 'Liability': 16, 'Contact': 21 }
@@ -383,8 +384,8 @@ export default function TermsPage() {
         {/* Contact CTA */}
         <div className="max-w-3xl mx-auto mt-12">
           <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-100 rounded-3xl px-8 py-8 text-center">
-            <p className="text-gray-500 mb-1 text-sm font-semibold uppercase tracking-wider">Questions about our Terms?</p>
-            <h3 className="text-2xl font-black text-gray-900 mb-3">Get in Touch</h3>
+            <p className="text-gray-500 mb-1 text-sm font-semibold uppercase tracking-wider">{t.legal.questionsTitle}</p>
+            <h3 className="text-2xl font-black text-gray-900 mb-3">{t.legal.contactUs}</h3>
             <a
               href="mailto:notification@intuslab.io"
               className="inline-block bg-presenz-blue hover:bg-blue-700 text-white font-bold px-8 py-3 rounded-full transition shadow-lg shadow-blue-200 text-sm"

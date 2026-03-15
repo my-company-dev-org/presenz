@@ -1,16 +1,48 @@
+'use client'
+
 import Image from 'next/image'
 import { imgExperience } from '@/lib/images'
+import { useLanguage } from '@/lib/LanguageContext'
 
 export default function TheExperienceSection() {
+  const { t } = useLanguage()
+
   return (
-    <section className="py-12 sm:py-16 md:py-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-yellow-50 via-pink-50 to-purple-50">
-      <div className="max-w-7xl mx-auto flex justify-center">
+    <section
+      className="w-full overflow-hidden"
+      style={{
+        background: 'linear-gradient(135deg, #ffffff 0%, #dce6ff 40%, #6070d0 100%)',
+      }}
+    >
+      {/* Translated title sits above the image */}
+      <div className="text-center pt-12 pb-2 px-4">
+        <h2
+          className="font-black mb-2"
+          style={{ fontSize: 'clamp(2rem, 4vw, 3.2rem)', color: '#0d1b5e' }}
+        >
+          {t.theExperience.title}
+        </h2>
+        <p
+          className="font-bold text-base sm:text-lg"
+          style={{ color: '#1a3fff' }}
+        >
+          {t.theExperience.subtitle}
+        </p>
+      </div>
+
+      {/* Image — crop the top portion that has the baked-in title using overflow+negative margin */}
+      <div className="overflow-hidden" style={{ marginTop: '-2px' }}>
         <Image
           src={imgExperience}
-          alt="Presenz app experience"
-          width={1200}
-          height={700}
-          className="w-full max-w-5xl h-auto rounded-lg"
+          alt="Presenz app — 5 screens"
+          width={1440}
+          height={860}
+          className="w-full h-auto"
+          style={{
+            /* Push image up to hide its baked-in title row (~17% of height) */
+            marginTop: '-17%',
+          }}
+          priority
         />
       </div>
     </section>
